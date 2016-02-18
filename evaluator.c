@@ -9,6 +9,7 @@ int main(int argc, char *argv[]) {
 
     if(is_proper_format(input)) {
         printf("CORRECT!\n");
+        store_string(input);
     } else {
         printf("INCORRECT\n");
     }

@@ -8,4 +8,5 @@
 
 bool is_proper_format(char input[]);
 void store_string(char *input);
+void numerical_rank(char input[]);
 #endif

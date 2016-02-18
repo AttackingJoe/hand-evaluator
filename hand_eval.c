@@ -3,7 +3,10 @@
 
 bool has_first = false;
 char *hand1;
+int hand1_rank = -1;
 char *hand2;
+int hand2_rank = -1;
+bool first_has_rank = false;
 
 /*
  * Checks to make sure that each hand is in its proper format
@@ -25,7 +28,7 @@ bool is_proper_format(char input[]) {
                 }
 
             } else { // it isn't an int, so it should be one of five chars
-                char c = (char)input[index];
+                char c = input[index];
                 if(c == 'T' || c == 't' || c == 'J' || c == 'j' || c == 'Q' || c == 'q' || c == 'K' || c == 'k' || c == 'A' || c == 'a') {
 
                     if(!isdigit(input[index + 1])) {
@@ -51,6 +54,43 @@ bool is_proper_format(char input[]) {
     }
     return true;
 }
+
+void numerical_rank(char hand[]) {
+    for(int i = 0; i < strlen(hand); ++i) {
+        switch (hand[i]) {
+            case 'A':
+                break;
+            case 'K':
+                break;
+            case 'Q':
+                break;
+            case 'J':
+                break;
+            case 'T':
+                break;
+            case '9':
+                break;
+            case '8':
+                break;
+            case '7':
+                break;
+            case '6':
+                break;
+            case '5':
+                break;
+            case '4':
+                break;
+            case '3':
+                break;
+            case '2':
+                break;
+            default:
+                printf("error\n");
+        }
+        ++i;
+    }
+}
+
 /*
  * Simply store each hand to compare
  */
@@ -62,6 +102,7 @@ void store_string(char *input) {
     else {
         hand1 = input;
         has_first = !has_first;
+        printf("First hand: %s\n", hand1);
     }
 
 }
