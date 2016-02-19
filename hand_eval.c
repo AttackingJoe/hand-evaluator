@@ -91,6 +91,22 @@ void numerical_rank(char hand[]) {
     }
 }
 
+bool is_flush(char hand[]) {
+
+}
+
+bool is_straight(char hand[]) {
+
+}
+
+bool is_one_pair(char hand[]) {
+
+}
+
+bool is_two_pair(char hand[]) {
+
+}
+
 /*
  * Simply store each hand to compare
  */
