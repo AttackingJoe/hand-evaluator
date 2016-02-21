@@ -12,6 +12,11 @@ public class HandEvaluator {
         System.out.println(hand2.toString());
     }
 
+    public int compareHands(Hand hand1, Hand hand2) {
+
+        return 0;
+    }
+
 
 
 }

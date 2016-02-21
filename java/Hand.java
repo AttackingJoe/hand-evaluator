@@ -1,20 +1,55 @@
+import java.util.Arrays;
 
 public class Hand {
 
-    private String cards;
+    private String input;
     private long value;
+    private Card cards[];
 
-    public Hand(String cards) {
-        this.cards  = cards;
-        value = calcValue(this.cards);
+    private final int HIGHCARD = 1;
+    private final int ONEPAIR = 2;
+    private final int TWOPAIR = 3;
+    private final int TRIPS = 4;
+    private final int STRAIGHT = 5;
+    private final int FLUSH = 6;
+    private final int BOAT = 7;
+    private final int QUADS = 8;
+    private int numCards = 5;
+
+
+
+    private boolean isHighCard, isOnePair, isTwoPair, isTrips, isStraight, isFlush, isBoat, isQuads;
+    private long primes[];
+    private String ranksAndSuits[];
+
+    public Hand(String input) {
+        this.input  = input;
+        createHand();
+        primes = new long[5];
+        ranksAndSuits = new String[5];
+        value = calcValue(this.input);
+        setPrimes();
+        sortCards();
+
+    }
+
+    private void createHand() {
+        cards = new Card[5];
+        int index = 0;
+        for(int i = 0; i < input.length() - 1; i += 2) {
+            char rank = input.charAt(i);
+            char suit = input.charAt(i+1);
+            cards[index] = new Card(rank, suit);
+            ++index;
+        }
     }
 
     public String getCards() {
-        return cards;
+        return input;
     }
 
-    public void setCards(String cards) {
-        this.cards = cards;
+    public void setCards(String input) {
+        this.input = input;
     }
 
     public boolean isProperFormat(String cards) {
@@ -22,8 +57,25 @@ public class Hand {
         return false;
     }
 
+    private void sortCards() {
+        setStringArray();
+        Arrays.sort(primes);
+        Arrays.sort(ranksAndSuits);
+
+        for(int i = numCards -1; i > 0; --i) {
+            String s = ranksAndSuits[i].substring(0,1);
+            long value = getCardValue(s);
+
+            for(int j = 0; j < numCards; ++j) {
+
+            }
+
+        }
+    }
+
     private long getCardValue(String card) {
         String c = card.toLowerCase();
+
         switch (c) {
             case "2" :
                 return 2;
@@ -52,29 +104,60 @@ public class Hand {
             case "a" :
                 return 41;
             default:
-                return -1; // something wen wrong.
+                return -1; // something went wrong.
         }
     }
 
     private long calcValue(String cards) {
         long result = 1;
-        for(int i =0; i < 5; ++i) {
+        for(int i =0; i < numCards; ++i) {
             result *= getCardValue(cards.substring(i * 2, (i*2)+1));
         }
 
         return result;
     }
 
+    private void setStringArray() {
+        int index = 0;
+        for(int i = 0; i < input.length() - 1; ++i) {
+            ranksAndSuits[index] = input.substring(i, i+2);
+            index++;
+            ++i;
+        }
+    }
+
+    private void setPrimes() {
+        int index = 0;
+        for(int i = 0; i < (numCards *2) - 1; ++i) {
+            String s = input.substring(i, i + 1);
+            primes[index] = getCardValue(s);
+            ++index;
+            ++i;
+        }
+    }
+
     public String toString() {
         String result = "";
-        for(int i = 0; i < cards.length() - 1; ++i) {
+        for(int i = 0; i < input.length() - 1; ++i) {
             if(i % 2 == 1)
                 result += " ";
             else
-                result += cards.substring(i, i+2);
+                result += input.substring(i, i+2);
         }
         result += " --- With a value of " + value;
+
+        result += "\n";
+        for(int i = 0; i < numCards; ++i) {
+            result += ranksAndSuits[i] + " ";
+
+        }
+        result += "\n";
+        for(int i = 0; i < numCards; ++i) {
+            result += "" + primes[i] + " ";
+        }
         return result;
     }
+
+
 
 }
