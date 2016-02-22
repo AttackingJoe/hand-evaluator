@@ -17,13 +17,12 @@ public class Hand {
     private int numCards = 5;
 
 
-
     private boolean isHighCard, isOnePair, isTwoPair, isTrips, isStraight, isFlush, isBoat, isQuads;
     private long primes[];
     private String ranksAndSuits[];
 
     public Hand(String input) {
-        this.input  = input;
+        this.input = input;
         createHand();
         primes = new long[5];
         ranksAndSuits = new String[5];
@@ -36,16 +35,16 @@ public class Hand {
     private void createHand() {
         cards = new Card[5];
         int index = 0;
-        for(int i = 0; i < input.length() - 1; i += 2) {
+        for (int i = 0; i < input.length() - 1; i += 2) {
             char rank = input.charAt(i);
-            char suit = input.charAt(i+1);
+            char suit = input.charAt(i + 1);
             cards[index] = new Card(rank, suit);
             ++index;
         }
     }
 
-    public String getCards() {
-        return input;
+    public Card[] getCards() {
+        return cards;
     }
 
     public void setCards(String input) {
@@ -62,14 +61,20 @@ public class Hand {
         Arrays.sort(primes);
         Arrays.sort(ranksAndSuits);
 
-        for(int i = numCards -1; i > 0; --i) {
-            String s = ranksAndSuits[i].substring(0,1);
-            long value = getCardValue(s);
+        // terrible sorting method --- temporary
 
-            for(int j = 0; j < numCards; ++j) {
+        int cardArray[] = new int[numCards];
 
-            }
+        for (int i = 0; i < numCards; ++i) {
+            cardArray[i] = cards[i].getValue();
+        }
 
+        Arrays.sort(cards, new Card.CardComparator());
+
+//        Arrays.sort(cardArray);
+
+        for (int i = 0; i < numCards; ++i) {
+            cards[i] = new Card(cardArray[i]);
         }
     }
 
@@ -77,31 +82,31 @@ public class Hand {
         String c = card.toLowerCase();
 
         switch (c) {
-            case "2" :
+            case "2":
                 return 2;
-            case "3" :
+            case "3":
                 return 3;
-            case "4" :
+            case "4":
                 return 5;
-            case "5" :
+            case "5":
                 return 7;
-            case "6" :
+            case "6":
                 return 11;
-            case "7" :
+            case "7":
                 return 13;
-            case "8" :
+            case "8":
                 return 17;
-            case "9" :
+            case "9":
                 return 19;
-            case "t" :
+            case "t":
                 return 23;
-            case "j" :
+            case "j":
                 return 29;
-            case "q" :
+            case "q":
                 return 31;
-            case "k" :
+            case "k":
                 return 37;
-            case "a" :
+            case "a":
                 return 41;
             default:
                 return -1; // something went wrong.
@@ -110,8 +115,8 @@ public class Hand {
 
     private long calcValue(String cards) {
         long result = 1;
-        for(int i =0; i < numCards; ++i) {
-            result *= getCardValue(cards.substring(i * 2, (i*2)+1));
+        for (int i = 0; i < numCards; ++i) {
+            result *= getCardValue(cards.substring(i * 2, (i * 2) + 1));
         }
 
         return result;
@@ -119,8 +124,8 @@ public class Hand {
 
     private void setStringArray() {
         int index = 0;
-        for(int i = 0; i < input.length() - 1; ++i) {
-            ranksAndSuits[index] = input.substring(i, i+2);
+        for (int i = 0; i < input.length() - 1; ++i) {
+            ranksAndSuits[index] = input.substring(i, i + 2);
             index++;
             ++i;
         }
@@ -128,7 +133,7 @@ public class Hand {
 
     private void setPrimes() {
         int index = 0;
-        for(int i = 0; i < (numCards *2) - 1; ++i) {
+        for (int i = 0; i < (numCards * 2) - 1; ++i) {
             String s = input.substring(i, i + 1);
             primes[index] = getCardValue(s);
             ++index;
@@ -136,28 +141,77 @@ public class Hand {
         }
     }
 
-    public String toString() {
+    public boolean isFlush() {
+        for (int i = 0; i < numCards - 1; ++i) {
+            if (cards[i].getISuit() != cards[i + 1].getISuit()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isStraight() {
+        boolean isLast = false;
+        for (int i = numCards - 1; i > 0; --i) {
+            // have one special case of 2345A
+            if (i == 1) {
+                isLast = true;
+            }
+            int difference;
+            int rankOne = cards[i].getIRank();
+            int rankTwo = cards[i - 1].getIRank();
+            difference = rankOne - rankTwo;
+            if (isLast) {
+                if (difference != -12 && difference != 1)
+                    return false;
+                isLast = false;
+            } else {
+                if (difference != 1) {
+                    return false;
+                }
+            }
+
+
+        }
+        return true;
+    }
+
+    public Card getCardAt(int index) {
+        if (index >= 0 && index < numCards) {
+            return cards[index];
+        }
+        return null;
+    }
+
+    public String printCards() {
         String result = "";
-        for(int i = 0; i < input.length() - 1; ++i) {
-            if(i % 2 == 1)
-                result += " ";
-            else
-                result += input.substring(i, i+2);
-        }
-        result += " --- With a value of " + value;
-
-        result += "\n";
-        for(int i = 0; i < numCards; ++i) {
-            result += ranksAndSuits[i] + " ";
-
-        }
-        result += "\n";
-        for(int i = 0; i < numCards; ++i) {
-            result += "" + primes[i] + " ";
+        for (int i = 0; i < numCards; ++i) {
+            result += cards[i].toString() + " ";
         }
         return result;
     }
 
+    public String toString() {
+        String result = "";
+        for (int i = 0; i < input.length() - 1; ++i) {
+            if (i % 2 == 1)
+                result += " ";
+            else
+                result += input.substring(i, i + 2);
+        }
+        result += " --- With a value of " + value;
+
+        result += "\n";
+        for (int i = 0; i < numCards; ++i) {
+            result += ranksAndSuits[i] + " ";
+
+        }
+        result += "\n";
+        for (int i = 0; i < numCards; ++i) {
+            result += "" + primes[i] + " ";
+        }
+        return result;
+    }
 
 
 }
