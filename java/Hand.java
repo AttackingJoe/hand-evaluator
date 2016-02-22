@@ -73,9 +73,9 @@ public class Hand {
 
 //        Arrays.sort(cardArray);
 
-        for (int i = 0; i < numCards; ++i) {
-            cards[i] = new Card(cardArray[i]);
-        }
+//        for (int i = 0; i < numCards; ++i) {
+//            cards[i] = new Card(cardArray[i]);
+//        }
     }
 
     private long getCardValue(String card) {
@@ -151,20 +151,17 @@ public class Hand {
     }
 
     public boolean isStraight() {
-        boolean isLast = false;
+        boolean isFirst = true;
         for (int i = numCards - 1; i > 0; --i) {
             // have one special case of 2345A
-            if (i == 1) {
-                isLast = true;
-            }
             int difference;
             int rankOne = cards[i].getIRank();
             int rankTwo = cards[i - 1].getIRank();
             difference = rankOne - rankTwo;
-            if (isLast) {
-                if (difference != -12 && difference != 1)
+            if (isFirst) {
+                if (difference != 9 && difference != 1)
                     return false;
-                isLast = false;
+                isFirst = false;
             } else {
                 if (difference != 1) {
                     return false;

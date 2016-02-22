@@ -4,7 +4,7 @@ public class HandEvaluator {
 
 
     public static void main(String args[]) {
-        String cards = "As2s3s4s5s9hThJsQcKd";
+        String cards = "As2s3s4s5s7h3h8sAc9d";
 
         Hand hand1 = new Hand(cards.substring(0, 10));
         Hand hand2 = new Hand(cards.substring(10));
