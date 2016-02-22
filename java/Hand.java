@@ -14,10 +14,12 @@ public class Hand {
     private final int FLUSH = 6;
     private final int BOAT = 7;
     private final int QUADS = 8;
+    private final int STRFLSH = 9;
     private int numCards = 5;
+    private HandRank rank;
 
 
-    private boolean isHighCard, isOnePair, isTwoPair, isTrips, isStraight, isFlush, isBoat, isQuads;
+//    private boolean isHighCard, isOnePair, isTwoPair, isTrips, isStraight, isFlush, isBoat, isQuads, isStraightFlush;
     private long primes[];
     private String ranksAndSuits[];
 
@@ -29,7 +31,53 @@ public class Hand {
         value = calcValue(this.input);
         setPrimes();
         sortCards();
+        rank = calculateRank();
 
+    }
+
+    public int[] findUnique() {
+        int[] unique = new int[numCards];
+        for(int i = 0; i < numCards; ++i) {
+            unique[i] = -1;
+        }
+        int index = 0;
+        for(int i = 0; i < numCards - 1; ++i) {
+            int rank = cards[i].getIRank();
+            boolean isUnique = true;
+            for(int j = i + 1; j < numCards; ++j) {
+                if(rank == cards[j].getIRank())
+                    isUnique = false;
+            }
+            if(isUnique) {
+                unique[index++] = rank;
+            }
+        }
+        Arrays.sort(unique);
+        return unique;
+    }
+
+    private HandRank calculateRank() {
+        if(isStraightFlush())
+            return HandRank.STRFLUSH;
+        if(isQuads())
+            return HandRank.QUADS;
+        if(isBoat())
+            return HandRank.BOAT;
+        if(isFlush())
+            return HandRank.FLUSH;
+        if(isStraight())
+            return HandRank.STRAIGHT;
+        if(isTrips())
+            return HandRank.TRIPS;
+        if(isTwoPair())
+            return HandRank.TWOPAIR;
+        if(isOnePair())
+            return HandRank.ONEPAIR;
+        return HandRank.HIGHCARD;
+    }
+
+    public HandRank getRank() {
+        return rank;
     }
 
     private void createHand() {

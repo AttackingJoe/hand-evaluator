@@ -1,0 +1,5 @@
+
+public enum HandRank {
+
+    HIGHCARD, ONEPAIR, TWOPAIR, TRIPS, STRAIGHT, FLUSH, BOAT, QUADS, STRFLUSH
+}
