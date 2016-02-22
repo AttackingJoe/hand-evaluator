@@ -4,7 +4,8 @@ public class HandEvaluator {
 
 
     public static void main(String args[]) {
-        String cards = "As2s3s4s5s7h3h8sAc9d";
+//        String cards = "As2s3s4s5s7h3h8sAc9d";
+        String cards = "AsAcKcKsKd2h3h4h5h6h";
 
         Hand hand1 = new Hand(cards.substring(0, 10));
         Hand hand2 = new Hand(cards.substring(10));
@@ -22,12 +23,18 @@ public class HandEvaluator {
         System.out.println(hand1.isStraight() + "---" + hand1.printCards());
         System.out.println(hand2.isStraight() + "---" + hand2.printCards());
 
-        Card c = new Card('Q', 'c');
-        System.out.println(c.getValue());
-        Card c2 = new Card('K', 'd');
-        System.out.println(c2.getValue());
-        Card c3 = new Card('9', 'h');
-        System.out.println(c3.getValue());
+        System.out.println("Check for two pair");
+        System.out.println(hand1.isTwoPair() + "---" + hand1.printCards());
+
+        System.out.println("Check for full house");
+        System.out.println(hand1.isBoat() + "---" + hand1.printCards());
+
+        System.out.println("Check for three of a kind");
+        System.out.println(hand1.isTrips() + "---" + hand1.printCards());
+
+        System.out.println("Check for one pair");
+
+
 
     }
 

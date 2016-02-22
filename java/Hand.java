@@ -173,6 +173,105 @@ public class Hand {
         return true;
     }
 
+    public boolean isQuads() {
+        int count = 0;
+        int max = -1;
+        for(int i = 0; i < numCards - 1; ++i) {
+            if(cards[i].getIRank() == cards[i + 1].getIRank()) {
+                ++count;
+                if(count >= max)
+                    max = count;
+            }
+            else
+                count = 0;
+        }
+        return max == 3;
+    }
+
+    public boolean isTrips() {
+        int count = 0;
+        int max = -1;
+        for(int i = 0; i < numCards - 1; ++i) {
+            if(cards[i].getIRank() == cards[i + 1].getIRank()) {
+                ++count;
+                if(count > max)
+                    max = count;
+            }
+            else
+                count = 0;
+        }
+        return max == 2;
+    }
+
+    public boolean isOnePair() {
+        int count = 0;
+        int max = -1;
+        int numPairs = 0;
+        for(int i = 0; i < numCards - 1; ++i) {
+            if(cards[i].getIRank() == cards[i + 1].getIRank()) {
+                ++count;
+                ++numPairs;
+                if(count > max)
+                    max = count;
+            }
+            else
+                count = 0;
+        }
+        return (max == 1 && numPairs ==1);
+    }
+
+    public boolean isTwoPair() {
+        int count = 0;
+        int max = -1;
+        int numPairs = 0;
+        for(int i = 0; i < numCards - 1; ++i) {
+            if(cards[i].getIRank() == cards[i + 1].getIRank()) {
+                ++count;
+                ++numPairs;
+                if(count > max)
+                    max = count;
+            }
+            else
+                count = 0;
+        }
+        return (max == 1 && numPairs ==2);
+    }
+
+    public boolean isBoat() {
+        int numPairs = 0;
+        int numTrips = 0;
+        int count = 0;
+        int max = -1;
+        // check for one pair only
+        for(int i = 0; i < numCards - 1; ++i) {
+            if(cards[i].getIRank() == cards[i + 1].getIRank()) {
+                // need to check to make sure the next card is not the same rank
+                if(i != numCards - 2 && cards[i+1].getIRank() != cards[i+2].getIRank()) {
+                    ++count;
+                    if(count == 1)
+                        ++numPairs;
+                }
+
+            } else
+                count = 0;
+        }
+        count = 0;
+        for(int i = 0; i < numCards - 1; ++i) {
+            if(cards[i].getIRank() == cards[i + 1].getIRank()) {
+                ++count;
+                if(count == 2)
+                    ++numTrips;
+            } else {
+                count = 0;
+            }
+        }
+        return (numPairs == 1 && numTrips == 1);
+    }
+
+    public boolean isStraightFlush() {
+        return isFlush() && isStraight();
+    }
+
     public Card getCardAt(int index) {
         if (index >= 0 && index < numCards) {
             return cards[index];
