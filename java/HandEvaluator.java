@@ -1,3 +1,7 @@
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class HandEvaluator {
 
@@ -37,17 +41,49 @@ public class HandEvaluator {
 
 //        System.out.println("Check for one pair");
 
-        System.out.println("MOMENT OF TRUTH");
+        int count = 0;
+        BufferedReader br;
+        String sCurrentLine;
+        HandEvaluator evaluator;
+        try {
+            br = new BufferedReader(new FileReader("/home/lordstevex/Programming/Projects/hand-evaluator/java/input"));
 
-        HandEvaluator eval = new HandEvaluator("9h9c9s3d3cAsAcKcKsKd");
-        int winner = eval.compareHands();
+            try {
+                long startTime = System.currentTimeMillis();
 
-        if(winner == 1)
-            System.out.println("OKAY IT SEEMS TO BE WORKING");
-        else if(winner == 2)
-            System.out.println("Crap something went wrong");
-        else
-            System.out.println("Wow I REALLY messed up");
+                while ((sCurrentLine = br.readLine()) != null) {
+                    sCurrentLine = sCurrentLine.replace(" ", "");
+                    evaluator = new HandEvaluator(sCurrentLine);
+                    if(evaluator.compareHands() == 1) {
+                        count++;
+                    }
+
+//                    System.out.println(sCurrentLine);
+                }
+                long stopTime = System.currentTimeMillis();
+                long elapsedTime = stopTime - startTime;
+                System.out.println(elapsedTime);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(count);
+
+
+//        System.out.println("MOMENT OF TRUTH");
+//
+//        HandEvaluator eval = new HandEvaluator("9h9c9s3d3cAsAcKcKsKd");
+//        int winner = eval.compareHands();
+//
+//        if(winner == 1)
+//            System.out.println("OKAY IT SEEMS TO BE WORKING");
+//        else if(winner == 2)
+//            System.out.println("Crap something went wrong");
+//        else
+//            System.out.println("Wow I REALLY messed up");
 
 
 
