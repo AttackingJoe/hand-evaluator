@@ -5,13 +5,17 @@ public class Hand {
     private String input;
     private Card cards[];
     private final int NUM_RANKS = 13;
-    private int freq[] = new int[NUM_RANKS];
-    private int freqNoSort[] = new int[NUM_RANKS];
+    private int freq[] = new int[NUM_RANKS]; // frequency of the ranks of a Hand that will be sorted
+    private int freqNoSort[] = new int[NUM_RANKS]; // frequency of the ranks of a Hand that will NOT be sorted
     private int numCards = 5;
     private HandRank rank;
     private boolean isWheel;
 
 
+    /**
+     * Constructor for the Hand object, contains an input String of the Cards, and an array of Cards
+     * @param input is a String that represent different playing cards. ex) "ThJhQhKhAh"
+     */
     public Hand(String input) {
         this.input = input;
         createHand();
@@ -20,9 +24,11 @@ public class Hand {
         rank = calculateRank();
     }
 
+    /**
+     * Records the frequency of each rank of Card in a given Hand
+     * @return a sorted integer array containing the frequency of the given ranks in the Hand
+     */
     public int[] findUnique() {
-
-
         int[] unique = new int[numCards];
         for(int i = 0; i < numCards; ++i) {
             unique[i] = -1;
@@ -35,11 +41,15 @@ public class Hand {
                 ++index;
             }
         }
-
+        // We sort unique for easier look up when we want to use it
         Arrays.sort(unique);
         return unique;
     }
 
+    /**
+     * Gives the Hand a certain ranking of how good it is
+     * @return an enum of how good the Hand is
+     */
     private HandRank calculateRank() {
         if(isStraightFlush())
             return HandRank.STRFLUSH;
@@ -60,10 +70,16 @@ public class Hand {
         return HandRank.HIGHCARD;
     }
 
+    /**
+     * @return an enum of the Hand's ranking
+     */
     public HandRank getRank() {
         return rank;
     }
 
+    /**
+     * Sets up the Card array for the Hand by reading the input String
+     */
     private void createHand() {
         cards = new Card[5];
         int index = 0;
@@ -75,17 +91,22 @@ public class Hand {
         }
     }
 
+    /**
+     * Sorts the cards from low to high and creates the frequency arrays while it does that
+     */
     private void sortCards() {
         for (int i = 0; i < numCards; ++i) {
             freq[cards[i].getIRank()]++;
             freqNoSort[cards[i].getIRank()]++;
         }
-
         Arrays.sort(cards, new Card.CardComparator());
-
         Arrays.sort(freq);
     }
 
+    /**
+     * Checks to see if the Hand is a flush - All five Cards have the same ISuit value
+     * @return a boolean whether the Hand is a flush
+     */
     public boolean isFlush() {
         for (int i = 0; i < numCards - 1; ++i) {
             if (cards[i].getISuit() != cards[i + 1].getISuit()) {
@@ -95,6 +116,11 @@ public class Hand {
         return true;
     }
 
+    /**
+     * Checks to see if the Hand is a straight - All five cards are in sequential order.
+     * Unique case of the Wheel, which is A2345, but will be represented as 2345A due to sorting, so it will mark the Hand's isWheel to be true if this is the case
+     * @return a boolean whether the Hand is a straight
+     */
     public boolean isStraight() {
         boolean isFirst = true;
         for (int i = numCards - 1; i > 0; --i) {
