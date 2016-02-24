@@ -219,7 +219,7 @@ public class HandEvaluator {
     }
 
     private int findBetterQuads(Hand hand1, Hand hand2) {
-        int hand1Quad = -1, hand2Quad = -1;
+        int hand1Quad, hand2Quad;
         int hand1Unique[] = hand1.findUnique();
         int hand2Unique[] = hand2.findUnique();
 

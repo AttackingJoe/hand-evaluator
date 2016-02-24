@@ -29,14 +29,6 @@ public class Hand {
         rank = calculateRank();
     }
 
-    public int[] getFreq() {
-        return freq;
-    }
-
-    public int[] getFreqNoSort() {
-        return freqNoSort;
-    }
-
     public int[] findUnique() {
 
 
@@ -92,30 +84,12 @@ public class Hand {
         }
     }
 
-    public Card[] getCards() {
-        return cards;
-    }
-
-    public void setCards(String input) {
-        this.input = input;
-    }
-
-    public boolean isProperFormat(String cards) {
-
-        return false;
-    }
-
     private void sortCards() {
         setStringArray();
         Arrays.sort(primes);
         Arrays.sort(ranksAndSuits);
 
-        // terrible sorting method --- temporary
-
-        int cardArray[] = new int[numCards];
-
         for (int i = 0; i < numCards; ++i) {
-            cardArray[i] = cards[i].getValue();
             freq[cards[i].getIRank()]++;
             freqNoSort[cards[i].getIRank()]++;
         }
@@ -230,41 +204,23 @@ public class Hand {
     }
 
     public boolean isQuads() {
-
-
-        if(freq[12] == 4 && freq[11] == 1) {
-            return true;
-        }
-
-        return false;
+        return freq[12] == 4 && freq[11] == 1;
     }
 
     public boolean isTrips() {
-        if(freq[12] == 3 && freq[11] == 1 && freq[10] == 1) {
-            return true;
-        }
-        return false;
+        return freq[12] == 3 && freq[11] == 1 && freq[10] == 1;
     }
 
     public boolean isOnePair() {
-        if(freq[12] == 2 && freq[11] == 1 && freq[10] == 1 && freq[9] == 1) {
-            return true;
-        }
-        return false;
+        return freq[12] == 2 && freq[11] == 1 && freq[10] == 1 && freq[9] == 1;
     }
 
     public boolean isTwoPair() {
-        if(freq[12] == 2 && freq[11] == 2 && freq[10] == 1) {
-            return true;
-        }
-        return false;
+        return freq[12] == 2 && freq[11] == 2 && freq[10] == 1;
     }
 
     public boolean isBoat() {
-        if(freq[12] == 3 && freq[11] == 2) {
-            return true;
-        }
-        return false;
+        return freq[12] == 3 && freq[11] == 2;
     }
 
     public boolean isStraightFlush() {
@@ -276,14 +232,6 @@ public class Hand {
             return cards[index];
         }
         return null;
-    }
-
-    public String printCards() {
-        String result = "";
-        for (int i = 0; i < numCards; ++i) {
-            result += cards[i].toString() + " ";
-        }
-        return result;
     }
 
     public String toString() {
