@@ -26,9 +26,7 @@ public class Card {
     public final static int KING = 11;
     public final static int ACE = 12;
 
-    public final static int NUM_SUITS = 4;
     public final static int NUM_RANKS = 13;
-    public final static int NUM_CARDS = 52;
 
     private int iRank;
     private int iSuit;
@@ -139,18 +137,6 @@ public class Card {
 
     private int calcIndex(int rank, int suit) {
         return(suit*NUM_RANKS) + rank;
-    }
-
-    public int getValue() {
-        return value;
-    }
-
-    public char getRank() {
-        return rank;
-    }
-
-    public char getSuit() {
-        return suit;
     }
 
     public int calcRank(int value) {

@@ -34,7 +34,7 @@ public class HandEvaluator {
                         }
                         totalCount++;
 
-                        System.out.println(sCurrentLine + " --- " + evaluator.compareHands());
+//                        System.out.println(sCurrentLine + " --- " + evaluator.compareHands());
                     }
                     long stopTime = System.currentTimeMillis();
                     long elapsedTime = stopTime - startTime;
