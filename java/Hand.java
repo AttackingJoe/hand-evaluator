@@ -5,18 +5,12 @@ public class Hand {
     private String input;
     private long value;
     private Card cards[];
-
-    private final int HIGHCARD = 1;
-    private final int ONEPAIR = 2;
-    private final int TWOPAIR = 3;
-    private final int TRIPS = 4;
-    private final int STRAIGHT = 5;
-    private final int FLUSH = 6;
-    private final int BOAT = 7;
-    private final int QUADS = 8;
-    private final int STRFLSH = 9;
+    private final int NUM_RANKS = 13;
+    private int freq[] = new int[NUM_RANKS];
+    private int freqNoSort[] = new int[NUM_RANKS];
     private int numCards = 5;
     private HandRank rank;
+    private boolean isWheel;
 
 
 //    private boolean isHighCard, isOnePair, isTwoPair, isTrips, isStraight, isFlush, isBoat, isQuads, isStraightFlush;
@@ -31,27 +25,34 @@ public class Hand {
         value = calcValue(this.input);
         setPrimes();
         sortCards();
+        isWheel = false;
         rank = calculateRank();
+    }
 
+    public int[] getFreq() {
+        return freq;
+    }
+
+    public int[] getFreqNoSort() {
+        return freqNoSort;
     }
 
     public int[] findUnique() {
+
+
         int[] unique = new int[numCards];
         for(int i = 0; i < numCards; ++i) {
             unique[i] = -1;
         }
+
         int index = 0;
-        for(int i = 0; i < numCards - 1; ++i) {
-            int rank = cards[i].getIRank();
-            boolean isUnique = true;
-            for(int j = i + 1; j < numCards; ++j) {
-                if(rank == cards[j].getIRank())
-                    isUnique = false;
-            }
-            if(isUnique) {
-                unique[index++] = rank;
+        for(int i = NUM_RANKS - 1; i> -1; --i ) {
+            if(freqNoSort[i] == 1) {
+                unique[index] = i;
+                ++index;
             }
         }
+
         Arrays.sort(unique);
         return unique;
     }
@@ -115,15 +116,15 @@ public class Hand {
 
         for (int i = 0; i < numCards; ++i) {
             cardArray[i] = cards[i].getValue();
+            freq[cards[i].getIRank()]++;
+            freqNoSort[cards[i].getIRank()]++;
         }
 
         Arrays.sort(cards, new Card.CardComparator());
 
-//        Arrays.sort(cardArray);
+        Arrays.sort(freq);
 
-//        for (int i = 0; i < numCards; ++i) {
-//            cards[i] = new Card(cardArray[i]);
-//        }
+
     }
 
     private long getCardValue(String card) {
@@ -209,6 +210,9 @@ public class Hand {
             if (isFirst) {
                 if (difference != 9 && difference != 1)
                     return false;
+                if (difference == 9) {
+                    isWheel = true;
+                }
                 isFirst = false;
             } else {
                 if (difference != 1) {
@@ -221,99 +225,46 @@ public class Hand {
         return true;
     }
 
+    public boolean isWheel() {
+        return isWheel;
+    }
+
     public boolean isQuads() {
-        int count = 0;
-        int max = -1;
-        for(int i = 0; i < numCards - 1; ++i) {
-            if(cards[i].getIRank() == cards[i + 1].getIRank()) {
-                ++count;
-                if(count >= max)
-                    max = count;
-            }
-            else
-                count = 0;
+
+
+        if(freq[12] == 4 && freq[11] == 1) {
+            return true;
         }
-        return max == 3;
+
+        return false;
     }
 
     public boolean isTrips() {
-        int count = 0;
-        int max = -1;
-        for(int i = 0; i < numCards - 1; ++i) {
-            if(cards[i].getIRank() == cards[i + 1].getIRank()) {
-                ++count;
-                if(count > max)
-                    max = count;
-            }
-            else
-                count = 0;
+        if(freq[12] == 3 && freq[11] == 1 && freq[10] == 1) {
+            return true;
         }
-        return max == 2;
+        return false;
     }
 
     public boolean isOnePair() {
-        int count = 0;
-        int max = -1;
-        int numPairs = 0;
-        for(int i = 0; i < numCards - 1; ++i) {
-            if(cards[i].getIRank() == cards[i + 1].getIRank()) {
-                ++count;
-                ++numPairs;
-                if(count > max)
-                    max = count;
-            }
-            else
-                count = 0;
+        if(freq[12] == 2 && freq[11] == 1 && freq[10] == 1 && freq[9] == 1) {
+            return true;
         }
-        return (max == 1 && numPairs ==1);
+        return false;
     }
 
     public boolean isTwoPair() {
-        int count = 0;
-        int max = -1;
-        int numPairs = 0;
-        for(int i = 0; i < numCards - 1; ++i) {
-            if(cards[i].getIRank() == cards[i + 1].getIRank()) {
-                ++count;
-                ++numPairs;
-                if(count > max)
-                    max = count;
-            }
-            else
-                count = 0;
+        if(freq[12] == 2 && freq[11] == 2 && freq[10] == 1) {
+            return true;
         }
-        return (max == 1 && numPairs ==2);
+        return false;
     }
 
     public boolean isBoat() {
-        int numPairs = 0;
-        int numTrips = 0;
-        int count = 0;
-        int max = -1;
-        // check for one pair only
-        for(int i = 0; i < numCards - 1; ++i) {
-            if(cards[i].getIRank() == cards[i + 1].getIRank()) {
-                // need to check to make sure the next card is not the same rank
-                if(i != numCards - 2 && cards[i+1].getIRank() != cards[i+2].getIRank()) {
-                    ++count;
-                    if(count == 1)
-                        ++numPairs;
-                }
-
-            } else
-                count = 0;
+        if(freq[12] == 3 && freq[11] == 2) {
+            return true;
         }
-        count = 0;
-        for(int i = 0; i < numCards - 1; ++i) {
-            if(cards[i].getIRank() == cards[i + 1].getIRank()) {
-                ++count;
-                if(count == 2)
-                    ++numTrips;
-            } else {
-                count = 0;
-            }
-        }
-        return (numPairs == 1 && numTrips == 1);
+        return false;
     }
 
     public boolean isStraightFlush() {

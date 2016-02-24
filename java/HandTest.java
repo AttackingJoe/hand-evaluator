@@ -42,6 +42,12 @@ public class HandTest {
     }
 
     @org.junit.Test
+    public void testIsStraightWheel() throws Exception {
+        Hand handIsWheel = new Hand("3c4c5d2sAh");
+        assertTrue(handIsWheel.isWheel());
+    }
+
+    @org.junit.Test
     public void testIsQuads() throws Exception {
         Hand handIsQuads = new Hand("AcAsAdAhKd");
         Hand handIsNotQuads = new Hand("AcAsAdQhKd");
@@ -54,10 +60,13 @@ public class HandTest {
     @org.junit.Test
     public void testIsTrips() throws Exception {
         Hand handIsTrips = new Hand("AcAsAdQhKd");
+        Hand handIsTrips2 = new Hand("5c4s3d3h3c");
         Hand handIsNotTrips = new Hand("AcAsAdAhKd");
+
 
         assertTrue(handIsTrips.isTrips());
         assertFalse(handIsNotTrips.isTrips());
+        assertTrue(handIsTrips2.isTrips());
     }
 
     @org.junit.Test
@@ -89,11 +98,13 @@ public class HandTest {
         Hand handIsBoat2 = new Hand("3c3s3hKdKc");
         Hand handIsNotBoat = new Hand("AcAsAhKdQc");
         Hand handIsNotBoat2 = new Hand("AcAsKhKdQc");
+        Hand handIsNotBoat3 = new Hand("5c4s3d3h3c");
 
         assertTrue(handIsBoat.isBoat());
         assertTrue(handIsBoat2.isBoat());
         assertFalse(handIsNotBoat.isBoat());
         assertFalse(handIsNotBoat2.isBoat());
+        assertFalse(handIsNotBoat3.isBoat());
     }
 
     @org.junit.Test

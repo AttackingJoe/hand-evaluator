@@ -7,87 +7,54 @@ public class HandEvaluator {
 
     private String cards;
     private Hand hand1, hand2;
+    public static int totalCount = 0;
 
 
 
     public static void main(String args[]) {
-//        String cards = "As2s3s4s5s7h3h8sAc9d";
-//        String cards = "AsAcKcKsKdKh3h4h5h9h";
-//
-//        Hand hand1 = new Hand(cards.substring(0, 10));
-//        Hand hand2 = new Hand(cards.substring(10));
-//        System.out.println(hand1.toString());
-//        System.out.println(hand2.toString());
-//        System.out.println(hand1.printCards());
-//        System.out.println(hand2.printCards());
-//
-//
-//        System.out.println("Check for flushes");
-//        System.out.println(hand1.isFlush() + "---" + hand1.printCards());
-//        System.out.println(hand2.isFlush() + "---" + hand2.printCards());
-//
-//        System.out.println("Check for straights");
-//        System.out.println(hand1.isStraight() + "---" + hand1.printCards());
-//        System.out.println(hand2.isStraight() + "---" + hand2.printCards());
-//
-//        System.out.println("Check for two pair");
-//        System.out.println(hand1.isTwoPair() + "---" + hand1.printCards());
-//
-//        System.out.println("Check for full house");
-//        System.out.println(hand1.isBoat() + "---" + hand1.printCards());
-//
-//        System.out.println("Check for three of a kind");
-//        System.out.println(hand1.isTrips() + "---" + hand1.printCards());
+        boolean readFile = true;
 
-//        System.out.println("Check for one pair");
+        if (readFile) {
 
-        int count = 0;
-        BufferedReader br;
-        String sCurrentLine;
-        HandEvaluator evaluator;
-        try {
-            br = new BufferedReader(new FileReader("/home/lordstevex/Programming/Projects/hand-evaluator/java/input"));
-
+            int count = 0;
+            BufferedReader br;
+            String sCurrentLine;
+            HandEvaluator evaluator;
             try {
-                long startTime = System.currentTimeMillis();
+                br = new BufferedReader(new FileReader("/home/lordstevex/Programming/Projects/hand-evaluator/java/input"));
 
-                while ((sCurrentLine = br.readLine()) != null) {
-                    sCurrentLine = sCurrentLine.replace(" ", "");
-                    evaluator = new HandEvaluator(sCurrentLine);
-                    if(evaluator.compareHands() == 1) {
-                        count++;
+                try {
+                    long startTime = System.currentTimeMillis();
+
+                    while ((sCurrentLine = br.readLine()) != null) {
+                        sCurrentLine = sCurrentLine.replace(" ", "");
+                        evaluator = new HandEvaluator(sCurrentLine);
+                        if(evaluator.compareHands() == 1) {
+                            count++;
+                        }
+                        totalCount++;
+
+                        System.out.println(sCurrentLine + " --- " + evaluator.compareHands());
                     }
-
-//                    System.out.println(sCurrentLine);
+                    long stopTime = System.currentTimeMillis();
+                    long elapsedTime = stopTime - startTime;
+                    System.out.println(elapsedTime);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                long stopTime = System.currentTimeMillis();
-                long elapsedTime = stopTime - startTime;
-                System.out.println(elapsedTime);
-            } catch (IOException e) {
+            } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+
+            System.out.println(count);
+            System.out.println(totalCount);
         }
 
-        System.out.println(count);
-
-
-//        System.out.println("MOMENT OF TRUTH");
-//
-//        HandEvaluator eval = new HandEvaluator("9h9c9s3d3cAsAcKcKsKd");
-//        int winner = eval.compareHands();
-//
-//        if(winner == 1)
-//            System.out.println("OKAY IT SEEMS TO BE WORKING");
-//        else if(winner == 2)
-//            System.out.println("Crap something went wrong");
-//        else
-//            System.out.println("Wow I REALLY messed up");
-
-
-
-
+        if(!readFile) {
+            String cards = "KcKs2d2h2c5c4s3d3h3c"; // player two wins
+            HandEvaluator eval = new HandEvaluator(cards);
+            System.out.println(eval.compareHands());
+        }
     }
 
     public HandEvaluator(String cards) {
@@ -123,6 +90,8 @@ public class HandEvaluator {
                 return findHighestKicker(hand1, hand2);
             case BOAT:
                 return findBetterTrips(hand1, hand2);
+            case QUADS:
+                return findBetterQuads(hand1, hand2);
             case STRFLUSH:
                 return findHighestKicker(hand1, hand2);
             default:
@@ -136,6 +105,18 @@ public class HandEvaluator {
 
     // Used for HIGHCARD, STRAIGHT, FLUSH, STRFLUSH
     private int findHighestKicker(Hand hand1, Hand hand2) {
+        // Special case of a wheel straight
+
+        if(hand1.getRank() == HandRank.STRAIGHT || hand1.getRank() == HandRank.STRFLUSH || hand2.getRank() == HandRank.STRFLUSH || hand2.getRank() == HandRank.STRAIGHT) {
+            if(hand1.isWheel() && hand2.isWheel()) {
+                return 0; // tie
+            } else if( hand1.isWheel()) {
+                return 2; // hand 2 will win
+            } else if( hand2.isWheel()) {
+                return 1; // hand 1 will win
+            }
+        }
+
         // The last card should be the highest, so go from there
         for(int i = 4; i > -1; --i) {
             if(hand1.getCardAt(i).getIRank() > hand2.getCardAt(i).getIRank())
@@ -143,6 +124,7 @@ public class HandEvaluator {
             else if(hand1.getCardAt(i).getIRank() < hand2.getCardAt(i).getIRank())
                 return 2; // hand 2 is better than hand 1
         }
+
         return 0; // tie
     }
 
