@@ -6,27 +6,9 @@ public class Card {
     private char suit;
     private int value; // overall integer representation of a Card, a higher value doesn't always mean better Card
 
-    private final int CLUBS = 0;
-    private final int DIAMONDS = 1;
-    private final int HEARTS = 2;
-    private final int SPADES = 3;
-
-    private final int BAD_CARD = -1;
-    private final int TWO = 0;
-    private final int THREE = 1;
-    private final int FOUR = 2;
-    private final int FIVE = 3;
-    private final int SIX = 4;
-    private final int SEVEN = 5;
-    private final int EIGHT = 6;
-    private final int NINE = 7;
-    private final int TEN = 8;
-    private final int JACK = 9;
-    private final int QUEEN = 10;
-    private final int KING = 11;
-    private final int ACE = 12;
-
     private final int NUM_RANKS = 13;
+    private CardRank ranks[] = CardRank.values();
+    private CardSuit suits[] = CardSuit.values();
 
 
     private int iRank; // integer representation of the Card's rank
@@ -69,41 +51,41 @@ public class Card {
      * @return the integer representation of that Card
      */
     private int toValue(char rank, char suit) {
-        int r = -1;
+        CardRank r = CardRank.BAD_CARD;
         switch (rank) {
-            case '2': r = TWO; break;
-            case '3': r = THREE; break;
-            case '4': r = FOUR; break;
-            case '5': r = FIVE; break;
-            case '6': r = SIX; break;
-            case '7': r = SEVEN; break;
-            case '8': r = EIGHT; break;
-            case '9': r = NINE; break;
-            case 'T': r = TEN; break;
-            case 'J': r = JACK; break;
-            case 'Q': r = QUEEN; break;
-            case 'K': r = KING; break;
-            case 'A': r = ACE; break;
-            case 't': r = TEN; break;
-            case 'j': r = JACK; break;
-            case 'q': r = QUEEN; break;
-            case 'k': r = KING; break;
-            case 'a': r = ACE; break;
+            case '2': r = CardRank.TWO; break;
+            case '3': r = CardRank.THREE; break;
+            case '4': r = CardRank.FOUR; break;
+            case '5': r = CardRank.FIVE; break;
+            case '6': r = CardRank.SIX; break;
+            case '7': r = CardRank.SEVEN; break;
+            case '8': r = CardRank.EIGHT; break;
+            case '9': r = CardRank.NINE; break;
+            case 'T': r = CardRank.TEN; break;
+            case 'J': r = CardRank.JACK; break;
+            case 'Q': r = CardRank.QUEEN; break;
+            case 'K': r = CardRank.KING; break;
+            case 'A': r = CardRank.ACE; break;
+            case 't': r = CardRank.TEN; break;
+            case 'j': r = CardRank.JACK; break;
+            case 'q': r = CardRank.QUEEN; break;
+            case 'k': r = CardRank.KING; break;
+            case 'a': r = CardRank.ACE; break;
         }
-        int s = -1;
+        CardSuit s = CardSuit.BAD_SUIT;
         switch (suit) {
-            case 'h': s = HEARTS; break;
-            case 'd': s = DIAMONDS; break;
-            case 's': s = SPADES; break;
-            case 'c': s = CLUBS; break;
-            case 'H': s = HEARTS; break;
-            case 'D': s = DIAMONDS; break;
-            case 'S': s = SPADES; break;
-            case 'C': s = CLUBS; break;
+            case 'h': s = CardSuit.HEARTS; break;
+            case 'd': s = CardSuit.DIAMONDS; break;
+            case 's': s = CardSuit.SPADES; break;
+            case 'c': s = CardSuit.CLUBS; break;
+            case 'H': s = CardSuit.HEARTS; break;
+            case 'D': s = CardSuit.DIAMONDS; break;
+            case 'S': s = CardSuit.SPADES; break;
+            case 'C': s = CardSuit.CLUBS; break;
         }
-        if (s != -1 && r != -1)
-            return calcValue(r,s);
-        else return BAD_CARD;
+        if (s.getValue() != -1 && r.getValue() != -1)
+            return calcValue(r.getValue(),s.getValue());
+        else return CardRank.BAD_CARD.getValue();
     }
 
     /**
@@ -112,7 +94,9 @@ public class Card {
      * @return a char representing the Card's rank
      */
     private char getRankFromValue(int value) {
-        int r = calcRank(value);
+        int integerRank = calcRank(value);
+
+        CardRank r = ranks[integerRank];
         switch (r) {
             case TWO:
                 return '2';
@@ -151,7 +135,9 @@ public class Card {
      * @return a char representing the Card's suit
      */
     private char getSuitFromValue(int value) {
-        int s = calcSuit(value);
+        int integerSuit = calcSuit(value);
+
+        CardSuit s = suits[integerSuit];
         switch (s) {
             case CLUBS:
                 return 'c';
@@ -181,7 +167,7 @@ public class Card {
      * @param value is the integer representation of the Card's overall value
      * @return an integer that represents the Card's rank value
      */
-    public int calcRank(int value) {
+    private int calcRank(int value) {
         return value % NUM_RANKS;
     }
 
@@ -190,7 +176,7 @@ public class Card {
      * @param value is the integer representation of the Card's overall value
      * @return an integer that represents the Card's suit value
      */
-    public int calcSuit(int value) {
+    private int calcSuit(int value) {
         return value / NUM_RANKS;
     }
 
