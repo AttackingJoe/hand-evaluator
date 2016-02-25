@@ -14,6 +14,7 @@ public class Hand {
 
     /**
      * Constructor for the Hand object, contains an input String of the Cards, and an array of Cards
+     *
      * @param input is a String that represent different playing cards. ex) "ThJhQhKhAh"
      */
     public Hand(String input) {
@@ -26,17 +27,18 @@ public class Hand {
 
     /**
      * Records the frequency of each rank of Card in a given Hand
+     *
      * @return a sorted integer array containing the frequency of the given ranks in the Hand
      */
     public int[] findUnique() {
         int[] unique = new int[numCards];
-        for(int i = 0; i < numCards; ++i) {
+        for (int i = 0; i < numCards; ++i) {
             unique[i] = -1;
         }
 
         int index = 0;
-        for(int i = NUM_RANKS - 1; i> -1; --i ) {
-            if(freqNoSort[i] == 1) {
+        for (int i = NUM_RANKS - 1; i > -1; --i) {
+            if (freqNoSort[i] == 1) {
                 unique[index] = i;
                 ++index;
             }
@@ -47,25 +49,27 @@ public class Hand {
     }
 
     /**
-     * Gives the Hand a certain ranking of how good it is
+     * Gives the Hand a certain ranking of how good it is, order is important to have the best ranking first
+     * and the worst ranking near the bottom
+     *
      * @return an enum of how good the Hand is
      */
     private HandRank calculateRank() {
-        if(isStraightFlush())
+        if (isStraightFlush())
             return HandRank.STRFLUSH;
-        if(isQuads())
+        if (isQuads())
             return HandRank.QUADS;
-        if(isBoat())
+        if (isBoat())
             return HandRank.BOAT;
-        if(isFlush())
+        if (isFlush())
             return HandRank.FLUSH;
-        if(isStraight())
+        if (isStraight())
             return HandRank.STRAIGHT;
-        if(isTrips())
+        if (isTrips())
             return HandRank.TRIPS;
-        if(isTwoPair())
+        if (isTwoPair())
             return HandRank.TWOPAIR;
-        if(isOnePair())
+        if (isOnePair())
             return HandRank.ONEPAIR;
         return HandRank.HIGHCARD;
     }
@@ -105,6 +109,7 @@ public class Hand {
 
     /**
      * Checks to see if the Hand is a flush - All five Cards have the same ISuit value
+     *
      * @return a boolean whether the Hand is a flush
      */
     public boolean isFlush() {
@@ -118,7 +123,9 @@ public class Hand {
 
     /**
      * Checks to see if the Hand is a straight - All five cards are in sequential order.
-     * Unique case of the Wheel, which is A2345, but will be represented as 2345A due to sorting, so it will mark the Hand's isWheel to be true if this is the case
+     * Unique case of the Wheel, which is A2345, but will be represented as 2345A due to sorting,
+     * so it will mark the Hand's isWheel to be true if this is the case
+     *
      * @return a boolean whether the Hand is a straight
      */
     public boolean isStraight() {
@@ -147,34 +154,77 @@ public class Hand {
         return true;
     }
 
+    /**
+     * Returns whether the Hand is a wheel straight - A2345
+     *
+     * @return a boolean value whether the Hand is a wheel straight
+     */
     public boolean isWheel() {
         return isWheel;
     }
 
+    /**
+     * Returns whether the Hand is of rank Quad, which is having four of the same rank Card with one other unique Card
+     *
+     * @return a boolean value whether the Hand is Quads of some soft
+     */
     public boolean isQuads() {
         return freq[12] == 4 && freq[11] == 1;
     }
 
+    /**
+     * Returns whether the Hand is Trips, looks for three Cards of the same rank and two Cards of different ranks
+     *
+     * @return a boolean value whether the Hand is Trips
+     */
     public boolean isTrips() {
         return freq[12] == 3 && freq[11] == 1 && freq[10] == 1;
     }
 
+    /**
+     * Returns whether the Hand is a One Pair, looks for two Cards of the same rank, and three Cards of different ranks
+     *
+     * @return a boolean value whether the Hand is a One Pair
+     */
     public boolean isOnePair() {
         return freq[12] == 2 && freq[11] == 1 && freq[10] == 1 && freq[9] == 1;
     }
 
+    /**
+     * Returns whether the Hand is a Two Pair, looks for two sets of two Cards of the same, but different ranks
+     * and one other Card of a different rank
+     *
+     * @return a boolean value whether the Hand is a Two Pair
+     */
     public boolean isTwoPair() {
         return freq[12] == 2 && freq[11] == 2 && freq[10] == 1;
     }
 
+    /**
+     * Returns whether the Hand is a Full House (aka Boat), looks for a set of three Cards of the same rank
+     * and a set of two Cards of the same rank, but different from the first
+     *
+     * @return a boolean value whether the Hand is a Boat (Full House)
+     */
     public boolean isBoat() {
         return freq[12] == 3 && freq[11] == 2;
     }
 
+    /**
+     * Returns whether the Hand is both a Flush and a Straight, if so it is then a Straight Flush
+     *
+     * @return a boolean value whether the Hand is a Straight Flush
+     */
     public boolean isStraightFlush() {
         return isFlush() && isStraight();
     }
 
+    /**
+     * Returns the card at the specified index, the index must be >=0 AND < numCards
+     *
+     * @param index the index of the Card to get
+     * @return a Card at the specified index, otherwise null
+     */
     public Card getCardAt(int index) {
         if (index >= 0 && index < numCards) {
             return cards[index];
@@ -182,6 +232,11 @@ public class Hand {
         return null;
     }
 
+    /**
+     * Prints out the Hand by looping through all Cards in the Hand and initiating each Cards toString() method
+     *
+     * @return a formatted String of the Cards in the Hand
+     */
     public String toString() {
         String result = "";
         for (int i = 0; i < numCards; ++i) {
