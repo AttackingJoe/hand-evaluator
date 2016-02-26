@@ -8,6 +8,7 @@ public class HandEvaluator {
     public static int totalCount = 0;
     private String cards;
     private Hand hand1, hand2;
+    private final int NUM_RANKS = 13;
 
 
     public HandEvaluator(String cards) {
@@ -181,32 +182,34 @@ public class HandEvaluator {
      */
     private int findBetterTwoPair(Hand hand1, Hand hand2) {
         int hand1PairOne = -1, hand1PairTwo = -1, hand2PairOne = -1, hand2PairTwo = -1;
-        for (int i = 0; i < 4; ++i) {
-            if (hand1.getCardAt(i).getIRank() == hand1.getCardAt(i + 1).getIRank()) {
-                if (hand1PairOne == -1) {
-                    hand1PairOne = hand1.getCardAt(i).getIRank();
-                } else {
-                    hand1PairTwo = hand1.getCardAt(i).getIRank();
-                }
+        int[] handOneFreq = hand1.getFreqNoSort();
+        int[] handTwoFreq = hand2.getFreqNoSort();
+
+        for(int i = NUM_RANKS - 1; i > -1; --i) {
+            if(handOneFreq[i] == 2) {
+                if(hand1PairOne == -1)
+                    hand1PairOne = i;
+                else
+                    hand1PairTwo = i;
             }
-            if (hand2.getCardAt(i).getIRank() == hand2.getCardAt(i + 1).getIRank()) {
-                if (hand2PairOne == -1) {
-                    hand2PairOne = hand2.getCardAt(i).getIRank();
-                } else {
-                    hand2PairTwo = hand2.getCardAt(i).getIRank();
-                }
+            if(handTwoFreq[i] == 2) {
+                if(hand2PairOne == -1)
+                    hand2PairOne = i;
+                else
+                    hand2PairTwo = i;
             }
         }
 
-        // Pair two should be the higher pair (sorted from low to high)
-        if (hand1PairTwo > hand2PairTwo)
-            return 1; // hand 1 is better than hand 2
-        if (hand1PairTwo < hand2PairTwo)
-            return 2; // hand 2 is better than hand 1
+        // Pair one should be the higher pair because we are starting at the end of the freq array
         if (hand1PairOne > hand2PairOne)
             return 1; // hand 1 is better than hand 2
         if (hand1PairOne < hand2PairOne)
             return 2; // hand 2 is better than hand 1
+        if (hand1PairTwo > hand2PairTwo)
+            return 1; // hand 1 is better than hand 2
+        if (hand1PairTwo < hand2PairTwo)
+            return 2; // hand 2 is better than hand 1
+
 
         return findHighestKickerIgnoreMult(hand1, hand2);
     }
@@ -214,22 +217,15 @@ public class HandEvaluator {
     /*
     Finds the better three of a kind in the Hand
      */
-    // TODO utilize the freqNoSort array
     private int findBetterTrips(Hand hand1, Hand hand2) {
+        int[] handOneFreq = hand1.getFreqNoSort();
+        int[] handTwoFreq = hand2.getFreqNoSort();
         int hand1Trips = -1, hand2Trips = -1;
-        for (int i = 0; i < 5 - 2; ++i) {
-            if (hand1.getCardAt(i).getIRank() == hand1.getCardAt(i + 1).getIRank() &&
-                    hand1.getCardAt(i).getIRank() == hand1.getCardAt(i + 2).getIRank()) {
-                hand1Trips = hand1.getCardAt(i).getIRank();
-                break;
-            }
-        }
-        for (int i = 0; i < 5 - 2; ++i) {
-            if (hand2.getCardAt(i).getIRank() == hand2.getCardAt(i + 1).getIRank() &&
-                    hand2.getCardAt(i).getIRank() == hand2.getCardAt(i + 2).getIRank()) {
-                hand2Trips = hand2.getCardAt(i).getIRank();
-                break;
-            }
+        for(int i = NUM_RANKS - 1; i > -1; --i) {
+            if(handOneFreq[i] == 3)
+                hand1Trips = i;
+            if(handTwoFreq[i] == 3)
+                hand2Trips = i;
         }
 
         if (hand1Trips > hand2Trips)

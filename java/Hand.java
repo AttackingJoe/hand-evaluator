@@ -49,6 +49,15 @@ public class Hand {
     }
 
     /**
+     * freqNoSort is used for finding all of the unique Cards in a given Hand and is also used for the comparison
+     * between two Hands for determining which Hand is better. It's indexes represent Card rankings.
+     * @return an integer array containing the unsorted frequency of Card ranks in a Hand
+     */
+    public int[] getFreqNoSort() {
+        return freqNoSort;
+    }
+
+    /**
      * Gives the Hand a certain ranking of how good it is, order is important to have the best ranking first
      * and the worst ranking near the bottom
      *
