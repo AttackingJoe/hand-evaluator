@@ -1,13 +1,9 @@
-import org.testng.annotations.Test;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import static org.junit.Assert.*;
-
-/**
- * Created by lordstevex on 2/22/16.
- */
 public class HandTest {
 
-    @Test
+    @org.junit.Test
     public void testGetCards() throws Exception {
 
     }

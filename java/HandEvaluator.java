@@ -33,7 +33,6 @@ public class HandEvaluator {
                     long startTime = System.currentTimeMillis();
 
                     while ((sCurrentLine = br.readLine()) != null) {
-                        sCurrentLine = sCurrentLine.replace(" ", "");
                         evaluator = new HandEvaluator(sCurrentLine);
                         if (evaluator.compareHands() == 1) {
                             count++;
@@ -61,6 +60,8 @@ public class HandEvaluator {
             HandEvaluator eval = new HandEvaluator(cards);
             System.out.println(eval.compareHands());
         }
+
+
     }
 
     /**
