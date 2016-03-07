@@ -16,53 +16,53 @@ public class HandEvaluator {
         hand1 = new Hand(cards.substring(0, 10));
         hand2 = new Hand(cards.substring(10));
     }
-
-    public static void main(String args[]) {
-        boolean readFile = true;
-
-        if (readFile) {
-
-            int count = 0;
-            BufferedReader br;
-            String sCurrentLine;
-            HandEvaluator evaluator;
-            try {
-                br = new BufferedReader(new FileReader("/home/lordstevex/Programming/Projects/hand-evaluator/java/input"));
-
-                try {
-                    long startTime = System.currentTimeMillis();
-
-                    while ((sCurrentLine = br.readLine()) != null) {
-                        evaluator = new HandEvaluator(sCurrentLine);
-                        if (evaluator.compareHands() == 1) {
-                            count++;
-                        }
-                        totalCount++;
-
-//                        System.out.println(sCurrentLine + " --- " + evaluator.compareHands());
-                    }
-                    long stopTime = System.currentTimeMillis();
-                    long elapsedTime = stopTime - startTime;
-                    System.out.println(elapsedTime);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-
-            System.out.println(count);
-            System.out.println(totalCount);
-        }
-
-        if (!readFile) {
-            String cards = "KcKs2d2h2c5c4s3d3h3c"; // player two wins
-            HandEvaluator eval = new HandEvaluator(cards);
-            System.out.println(eval.compareHands());
-        }
-
-
-    }
+//
+//    public static void main(String args[]) {
+//        boolean readFile = true;
+//
+//        if (readFile) {
+//
+//            int count = 0;
+//            BufferedReader br;
+//            String sCurrentLine;
+//            HandEvaluator evaluator;
+//            try {
+//                br = new BufferedReader(new FileReader("/home/lordstevex/Programming/Projects/hand-evaluator/java/input"));
+//
+//                try {
+//                    long startTime = System.currentTimeMillis();
+//
+//                    while ((sCurrentLine = br.readLine()) != null) {
+//                        evaluator = new HandEvaluator(sCurrentLine);
+//                        if (evaluator.compareHands() == 1) {
+//                            count++;
+//                        }
+//                        totalCount++;
+//
+////                        System.out.println(sCurrentLine + " --- " + evaluator.compareHands());
+//                    }
+//                    long stopTime = System.currentTimeMillis();
+//                    long elapsedTime = stopTime - startTime;
+//                    System.out.println(elapsedTime);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//            }
+//
+//            System.out.println(count);
+//            System.out.println(totalCount);
+//        }
+//
+//        if (!readFile) {
+//            String cards = "KcKs2d2h2c5c4s3d3h3c"; // player two wins
+//            HandEvaluator eval = new HandEvaluator(cards);
+//            System.out.println(eval.compareHands());
+//        }
+//
+//
+//    }
 
     /**
      * Takes two Hands and determines which one is the winning Hand, if there is one.
